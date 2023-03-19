@@ -1,7 +1,14 @@
-/*
-    home.css: This website contains selectors only used in home.css
-
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+.card-body {
+    background: rgba(43, 7, 250, 0.219);
+  }
+  .card-main {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .row-user {
+    border-radius: 5px;
+    border: 1px solid blue;
+  }
+  

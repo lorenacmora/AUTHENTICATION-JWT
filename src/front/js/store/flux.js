@@ -1,53 +1,81 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			token: null,
 			message: null,
 			demo: [
 				{
 					title: "FIRST",
 					background: "white",
-					initial: "white"
+					initial: "white",
 				},
 				{
 					title: "SECOND",
 					background: "white",
-					initial: "white"
-				}
-			]
+					initial: "white",
+				},
+			],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
 
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
+			syncTokenFromSessionStore: () => {
+				const token = localStorage.getItem("token");
+				if (token && token != "" && token != undefined)
+					setStore({ token: token });
+			},
+			logout: () => {
+				localStorage.removeItem("token");
+				setStore({ token: null });
+				return true;
+			},
+			logIn: async (data) => {
+				const opts = {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				};
+				try {
+					const resp = await fetch("http://127.0.0.1:3001/api/login", opts);
+
+					if (!resp.ok) {
+						getActions().alertmessage("Crendenciales invalidas");
+						return false;
+					}
+					const data = await resp.json();
+					setStore({ token: data.token });
+
+					localStorage.setItem("token", data.token);
+					setStore({ message: null });
+					return true;
+				} catch (error) {
+					console.error("There has been an error login in");
 				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			}
-		}
+			register: async (data) => {
+				try {
+					const resp = await fetch("http://127.0.0.1:3001/api/user", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(data),
+					});
+					if (resp.ok) {
+						return true;
+					} else {
+						return false;
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			alertmessage: (message) => {
+				setStore({ message: `${message}` });
+			},
+		},
 	};
 };
 
