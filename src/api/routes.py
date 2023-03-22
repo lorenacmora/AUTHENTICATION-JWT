@@ -1,6 +1,3 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
@@ -29,39 +26,16 @@ def add_user():
         if email is None or password is None:
             return jsonify ("You must provide an email and password")
         else:
-            salt = c855elcode(os.urandom(32)).decode('utf-8')
+            salt = b64encode(os.urandom(32)).decode('utf-8')
             password = set_password(password, salt)
             user  = User(email= email, password= password, salt=salt)
             db.session.add(user)
 
             try:
                 db.session.commit()
-                return jsonify ('usuario creado con exito'),200
+                return jsonify ('User has been created successfully'),201
             except Exception as error:
                 print(error.args)
                 db.session.rollback()
                 return jsonify ({'Message':f'error:{error.args}'}),500
-            
-
-
-
-@api.route('/login', methods= ['POST'])
-def handle_login():
-    if request.method == 'POST':
-        body = request.json
-        email = body.get("email", None)
-        password = body.get("password", None)
-
-        if email is None or password is None:
-            return jsonify ("es obligatorio el correo y la contrasena")
-        else:
-            login = User.query.filter_by(email=email).one_or_none()
-            print(login)
-            if login is None:
-                return jsonify ({"Message":'El correo electronico no existe'}),400
-            else:
-                if check_password(login.password, password, login.salt):
-                    token = create_access_token(identity=login.id)
-                    return jsonify({"token":token}),200
-                else:
-                    return jsonify({"Message":"el correo electronico no existe"}),400
+   

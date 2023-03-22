@@ -50,7 +50,7 @@ const Register = () => {
             </div>
             <div className="form-group my-2">
               <button type="button" onClick={() => handleSubmit()}>
-                Register
+                Registro
               </button>
             </div>
           </form>

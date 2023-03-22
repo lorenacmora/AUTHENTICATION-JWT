@@ -23,14 +23,13 @@ export const Navbar = () => {
 					{!store.token ? (
 						<>
 							<Link to="/login">
-								<button className="btn btn-primary">Please LogIn</button>
+								<button className="btn btn-primary">Logueate</button>
 							</Link>
 							<Link to="/demo">
 								<button
-									className="btn btn-primary mx-3
-			  "
+									className="btn btn-primary mx-3"
 								>
-									Register
+									Registrate
 								</button>
 							</Link>
 						</>

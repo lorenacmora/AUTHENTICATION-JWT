@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from "react";
-import { styles } from "../../styles/home.css";
+import { Styles } from "../../styles/home.css";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-export const Perfil = () => {
+export const Profile = () => {
   const { store, actions } = useContext(Context);
   const navigate = useNavigate();
   const token = store.token;

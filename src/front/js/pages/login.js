@@ -10,10 +10,10 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    let response = await actions.logIn({ email, password });
+    let response = await actions.login({ email, password });
     console.log(response);
     if (response) {
-      navigate("/perfil");
+      navigate("/profile");
     }
   };
   // if (store.token && store.token != "" && store.token != undefined)
@@ -21,13 +21,13 @@ export const Login = () => {
 
   useEffect(() => {
     if (store.token) {
-      navigate("/perfil");
+      navigate("/profile");
     }
   }, [store.token]);
 
   return (
     <div className="text-center mt-5">
-      <h1>Por favor introduzca su correo y contrasena</h1>
+      <h1>Por favor introduce lo requerido</h1>
       {store.message !== null ? (
         <div class="alert alert-danger" role="alert">
           {store.message}
