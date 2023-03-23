@@ -1,63 +1,68 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
-const initialState = {
-  email: "",
-  password: "",
-};
-const Register = () => {
-  const [user, setUser] = useState(initialState);
-  const { actions } = useContext(Context);
+import { Login } from "../pages/login";
+import { Link, useNavigate } from "react-router-dom";
 
-  const handleChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
+
+export const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { store, actions } = useContext(Context);
+  const navigate = useNavigate();
+  const register = async (event) => {
+    event.preventDefault();
+    const response = await actions.register(
+      email,
+      password
+    );
   };
-
-  const handleSubmit = async () => {
-    console.log(user);
-    let response = await actions.register(user);
-    console.log(response);
-  };
-
-  return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-12 col-md-7">
-          <form>
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Ingresa el email"
-                name="email"
-                value={user.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                className="form-control"
-                type="password"
-                placeholder="Ingresa el password"
-                name="password"
-                value={user.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group my-2">
-              <button type="button" onClick={() => handleSubmit()}>
-                Registro
-              </button>
-            </div>
-          </form>
-        </div>
+      return (
+        <>
+          
+          <div className="container">
+            <h1 className="d-flex justify-content-center my-5">Regístrate</h1>
+            <form className="row g-3" onSubmit={register}>
+              
+              <div className="col-md-6">
+                <label for="inputEmail4" className="form-label">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="inputEmail4"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+              </div>
+              <div className="col-md-6">
+                <label for="inputPassword4" className="form-label">
+                  Contraseña
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="inputPassword4"
+                  required
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+              </div>
+              <a href="#!" className="fw-bold text-body">
+              <Link to="/login">
+                <u>Enviar</u>
+              </Link>
+            </a>
+          
+          
+        </form>
       </div>
-    </div>
+      
+    </>
   );
 };
-
 export default Register;
+
+
+
