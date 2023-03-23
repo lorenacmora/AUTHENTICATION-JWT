@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar } from "../component/navbar";
-import { Footer } from "../component/footer";
+
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +10,7 @@ export const Login = () => {
 
   const { store, actions } = useContext(Context);
   const login = async (event) => {
+    event.preventDefault()
     if (email.trim() !== "" && password.trim() !== "") {
       const response = await actions.login(email, password);
       if (response) {
@@ -22,7 +22,9 @@ export const Login = () => {
       console.log("Todos los campos son requeridos");
     }
   };
-
+  useEffect(() => {
+		if (store.token && store.token !=null) navigate("/")
+	}, [store.token]);
   return (
     <>
     
@@ -30,12 +32,10 @@ export const Login = () => {
       <h1 className="d-flex justify-content-center my-5">Inicia Sesión</h1>
       <form
         className="p-4"
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
+        onSubmit={login}
       >
         <div className="mb-3">
-          <label for="exampleDropdownFormEmail2" className="form-label">
+          <label htmlFor="exampleDropdownFormEmail2" className="form-label">
             Email address
           </label>
           <input
@@ -49,7 +49,7 @@ export const Login = () => {
           />
         </div>
         <div className="mb-3">
-          <label for="exampleDropdownFormPassword2" className="form-label">
+          <label htmlFor="exampleDropdownFormPassword2" className="form-label">
             Password
           </label>
           <input
@@ -62,30 +62,17 @@ export const Login = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <div className="mb-3">
-          <div className="form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="dropdownCheck2"
-            />
-            <a href="#!" className="fw-bold text-body">
-                <Link to="/register">
-                <button
+        
+            
+                
+                <input
           type="submit"
           className="btn btn-primary"
-          onClick={() => login()}
-        >
-                  Sign Up
-                  </button>        
-                  </Link>
-              </a>
-          </div>
-        </div>         
-      </form>
-    </div>
-    
-    </>
+          value="login"
+        />
+        </form>
+        </div>
+      </>
   );
 };
 

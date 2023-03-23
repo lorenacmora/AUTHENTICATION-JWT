@@ -2,14 +2,14 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
-import Register from "../component/Register.jsx";
-import { Link } from "react-router-dom";
+import Register from "../component/Register";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
+	const navigate=useNavigate()
 	useEffect(() => {
-		if (store.token && store.token != "" && store.token != undefined)
-			actions.getMessage();
+		if (!store.token) navigate("/login")
 	}, [store.token]);
 
 	return (

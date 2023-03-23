@@ -21,24 +21,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			syncTokenFromSessionStore: () => {
 				const token = localStorage.getItem("token");
-				if (token && token != "" && token != undefined)
-					setStore({ token: token });
+				if (token && token != "" && token != undefined){setStore({ token: token })};
 			},
 			logout: () => {
 				localStorage.removeItem("token");
 				setStore({ token: null });
 				return true;
 			},
-			logIn: async (data) => {
+			login: async (email,password) => {
 				const opts = {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(data),
+					body: JSON.stringify({
+						email:email,
+						password:password
+					}),
 				};
 				try {
-					const resp = await fetch("http://127.0.0.1:3001/api/login", opts);
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/token`, opts);
 
 					if (!resp.ok) {
 						getActions().alertmessage("Crendenciales invalidas");
@@ -54,14 +56,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("There has been an error login in");
 				}
 			},
-			register: async (data) => {
+			register: async (email,password) => {
+				console.log(email, password)
 				try {
-					const resp = await fetch("http://127.0.0.1:3001/api/user", {
+					const resp = await fetch("https://3001-lorenacmora-authenticat-bzd3fjd5ock.ws-us92.gitpod.io/api/user", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify(data),
+						body: JSON.stringify({ 
+							email:email,
+							password:password
+						}),
 					});
 					if (resp.ok) {
 						return true;
